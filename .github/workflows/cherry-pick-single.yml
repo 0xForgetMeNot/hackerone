@@ -7,7 +7,6 @@ on:
         required: true
         type: string
         description: "The original PR title"
-      # بقیه ورودی‌ها را برای سادگی حذف کردم چون در اکسپلویت نقش ندارند
       version_number:
         required: false
         type: string
@@ -25,17 +24,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-
-      - name: Create Pull Request (VULNERABLE STEP)
+      - name: Vulnerable Step Simulation
         run: |
-          echo "Simulating the vulnerable step..."
+          echo "Simulating the vulnerable command..."
           
           
+          function gh() { echo "GH Command Executed with args: $@"; }
+          export -f gh
+          
+          # --- VULNERABLE CODE START ---
           gh pr create \
             --title "${{ inputs.pr_title }} (cherry-pick #${{ inputs.pr_number }} for ${{ inputs.version_number }})" \
             --body "This is a test body" \
             --base "main" \
-            --head "feature-branch" || true
-            
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            --head "feature-branch"
+          # --- VULNERABLE CODE END ---
